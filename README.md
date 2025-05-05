@@ -1,4 +1,3 @@
 # dsi321_2025
 
-"Introo"
-freoijfewoidojknvoierajgoirwjgoirewofhuuewfgtuyew
+"Intro"
