@@ -1,65 +1,54 @@
-import requests
-from bs4 import BeautifulSoup
-import urllib.parse
+import feedparser
 import csv
+from datetime import datetime
+import os
 
-def duckduckgo_search(query, num_results=10, max_pages=10):
-    query = urllib.parse.quote_plus(query)
-    results = []
-    seen_links = set()  # สำหรับตรวจสอบลิงก์ซ้ำ
-
-    for page in range(1, max_pages + 1):
-        url = f"https://duckduckgo.com/html/?q={query}&s={(page - 1) * num_results}"
-
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-        }
-
-        response = requests.get(url, headers=headers)
-
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.text, "html.parser")
-            for a in soup.find_all('a', class_='result__a'):
-                title = a.get_text()
-                link = a['href']
-                if link not in seen_links:
-                    seen_links.add(link)
-                    results.append((title, link))
-
-            print(f"Page {page} results retrieved.")
-        else:
-            print(f"Error on page {page}: {response.status_code}")
-            break
-
-        if len(results) >= 1000:
-            break
-
-    return results
-
-topics = [
-    "green construction materials",
+# คำค้นหาหลายคำที่เกี่ยวกับ alternative construction materials
+search_keywords = [
+     "green construction materials",
     "sustainable building materials",
-    "eco-friendly construction materials",
-    "recycled construction materials",
-    "innovative construction materials"
 ]
 
-all_results = []
-seen_links_all = set()  # ตรวจสอบลิงก์ซ้ำรวมจากทุกหัวข้อ
+# สร้างโฟลเดอร์ 'data' ถ้ายังไม่มี
+os.makedirs("data", exist_ok=True)
+# ชื่อไฟล์ CSV ที่จะบันทึก
+csv_path = os.path.join("data", "scrap_data.csv")
+file_exists = os.path.isfile(csv_path)
 
-for topic in topics:
-    print(f"Searching for: {topic}")
-    results = duckduckgo_search(topic, num_results=10, max_pages=10)
-    for title, link in results:
-        if link not in seen_links_all:
-            seen_links_all.add(link)
-            all_results.append((title, link))
+# โหลดลิงก์ที่เคยบันทึกไว้
+existing_links = set()
+if file_exists:
+    with open(csv_path, mode='r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames and "link" in reader.fieldnames:
+            for row in reader:
+                existing_links.add(row["link"])
+        else:
+            print("❌ ไม่พบหรือไม่มี field 'link' ในไฟล์ CSV")
 
-# บันทึกผลลัพธ์ลงในไฟล์ CSV
-with open('duckduckgo_results.csv', mode='w', newline='', encoding='utf-8') as file:
+# เตรียมเขียน CSV
+new_entries = 0
+with open(csv_path, mode='a', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
-    writer.writerow(['Title', 'Link'])
-    for title, link in all_results:
-        writer.writerow([title, link])
 
-print("ผลลัพธ์ถูกบันทึกลงในไฟล์ 'duckduckgo_results.csv' แล้ว")
+    # เขียน header ถ้ายังไม่มีไฟล์
+    if not file_exists:
+        writer.writerow(["title", "link", "published", "fetched_at", "keyword"])
+
+    for keyword in search_keywords:
+        rss_url = f"https://news.google.com/rss/search?q={keyword.replace(' ', '+')}"
+        feed = feedparser.parse(rss_url)
+
+        for entry in feed.entries:
+            if entry.link not in existing_links:
+                writer.writerow([
+                    entry.title,
+                    entry.link,
+                    entry.published,
+                    datetime.now().isoformat(),
+                    keyword
+                ])
+                existing_links.add(entry.link)
+                new_entries += 1
+
+print(f"✅ ดึงข่าวใหม่ {new_entries} รายการจาก {len(search_keywords)} คำค้นและบันทึกลง scrap_data.csv แล้ว")
