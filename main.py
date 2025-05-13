@@ -62,3 +62,44 @@ with open(csv_path, mode='a', newline='', encoding='utf-8') as file:
                 new_entries += 1
 
 print(f"✅ ดึงข่าวใหม่ {new_entries} รายการจาก {len(search_keywords)} คำค้นและบันทึกลง scrap_data.csv แล้ว")
+
+import pandas as pd
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+from nltk.corpus import stopwords
+import nltk
+
+# โหลด stopwords ของภาษาอังกฤษ (โหลดครั้งแรกเท่านั้น)
+nltk.download('stopwords')
+
+# เตรียม stop words
+stop_words = set(stopwords.words('english'))
+
+# โหลดไฟล์ข่าว
+df = pd.read_csv("data/scrap_data.csv")
+
+# รวม title ของข่าวทั้งหมดเป็นข้อความเดียว
+text = " ".join(df["title"].dropna().astype(str))
+
+# ตัด stopwords ออก
+filtered_words = [
+    word for word in text.split()
+    if word.lower() not in stop_words and word.isalpha()
+]
+filtered_text = " ".join(filtered_words)
+
+# สร้าง WordCloud จากข้อความที่ตัด stopwords แล้ว
+wordcloud = WordCloud(
+    width=1000,
+    height=600,
+    background_color='white',
+    max_words=200,
+    collocations=False
+).generate(filtered_text)
+
+# แสดงผล
+plt.figure(figsize=(12, 8))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.title("Word Cloud (without Stopwords)", fontsize=16)
+plt.show()
