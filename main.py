@@ -5,8 +5,18 @@ import os
 
 # คำค้นหาหลายคำที่เกี่ยวกับ alternative construction materials
 search_keywords = [
-     "Promoting Skills and Knowledge About the Use of Alternative Construction Materials in Local Communities: Job creation and self-reliance",
-    "Supply Chains and Challenges in Sourcing Alternative Construction Materials: Cost management and continuity",
+     "construction materials",
+    "building materials",
+    "building materials",
+    "building supplies",
+    "construction market",
+    "construction news",
+    "construction chemicals",
+    "material shortage",
+    "price increase construction",
+    "supply chain construction",
+    "green building materials",
+    "sustainable construction",
 ]
 
 # สร้างโฟลเดอร์ 'data' ถ้ายังไม่มี
