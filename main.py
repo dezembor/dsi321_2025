@@ -5,8 +5,8 @@ import os
 
 # คำค้นหาหลายคำที่เกี่ยวกับ alternative construction materials
 search_keywords = [
-     "green construction materials",
-    "sustainable building materials",
+     "Alternative Construction Materials",
+    "Using Renewable Resources in the Production of Construction Materials",
 ]
 
 # สร้างโฟลเดอร์ 'data' ถ้ายังไม่มี
