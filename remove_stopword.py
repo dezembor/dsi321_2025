@@ -30,9 +30,9 @@ custom_stopwords = {
     "engineering", "value", "growth", "trend", "innovation", "technology",
     "cement", "industry", "s", "weak", "strat",
     "smm", "made", "engineering", "sale", "travis", "perkins", "finding",
-    "material", "insights", "german", "researchers", "prices", "start",
-    "driven", "forecast", "analysis", "launched", "study", "data", "reporting",
-    "usd", "billion", "million", "cagr", "year", "years", "2030", "2035", "2025", "2031"
+    "material", "insights", "german", "researchers", "prices", "start", "new"
+    "driven", "forecast", "analysis", "launched", "study", "data", "reporting", "trends"
+    "usd", "billion", "million", "cagr", "year", "years", "2030", "2035", "2025", "2031", "research"
 }
 stop_words.update(custom_stopwords)
 
