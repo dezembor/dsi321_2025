@@ -26,9 +26,9 @@ custom_stopwords = {
     "and", "or", "that", "as", "during", "through", "along",
     "from", "above", "around", "of", "between", "under", "over",
     "products", "services", "materials", "solutions", "technologies", "construction", "building",
-    "supply", "demand", "development", "design",
+    "supply", "demand", "development", "design", "researchgate"
     "engineering", "value", "growth", "trend", "innovation", "technology",
-    "cement", "industry", "s", "weak", "strat",
+    "cement", "industry", "s", "weak", "strat", "new"
     "smm", "made", "engineering", "sale", "travis", "perkins", "finding",
     "material", "insights", "german", "researchers", "prices", "start", "new"
     "driven", "forecast", "analysis", "launched", "study", "data", "reporting", "trends"
